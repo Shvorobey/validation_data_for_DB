@@ -19,8 +19,8 @@
                 $data[$key] = stripslashes($data[$key]);
             }
 
-            if (self::getData($data['hash']) !== null) {
-                throw new Exception("Hash exist");
+            if (self::getData($data['Id']) !== null) {
+                throw new Exception("Id exist");
             }
             try {
                 PDO_DB::insert($data, self::TABLE);
@@ -31,14 +31,14 @@
             return true;
         }
 
-        public static function deleteData($hash)
+        public static function deleteData($id)
         {
-            PDO_DB::del_id(self::TABLE, $hash, false, 'hash', 'hash');
+            PDO_DB::del_id(self::TABLE, $id, false, 'Id', 'Id');
         }
 
-        public static function isHashExist($hash)
+        public static function isIdExist($id)
         {
-            $stm = PDO_DB::prepare("SELECT * FROM ".self::TABLE." WHERE hash=? LIMIT 1", [$hash]);
+            $stm = PDO_DB::prepare("SELECT * FROM ".self::TABLE." WHERE Id=? LIMIT 1", [$id]);
             $data = $stm->fetch();
 
             if ($data === false) {
@@ -47,9 +47,9 @@
             return true;
         }
 
-        public static function getData($hash)
+        public static function getData($id)
         {
-            $arr = PDO_DB::row_by_hash(self::TABLE, $hash, 'hash');
+            $arr = PDO_DB::row_by_Id(self::TABLE, $id, 'Id');
             if (!$arr) {
                 return null;
             }
@@ -57,9 +57,9 @@
             return $arr;
         }
 
-        public static function updateData($data, $hash)
+        public static function updateData($data, $id)
         {
-            $this_data = PDO_DB::row_by_hash(self::TABLE, $hash, 'hash');
+            $this_data = PDO_DB::row_by_Id(self::TABLE, $id, 'Id');
             if (!$this_data) {
                 return null;
             }
@@ -81,7 +81,7 @@
             if (strcasecmp($this_data['email'], $data['email']) !== 0) {
                 if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
                     if (self::getDataByEmail($data['email']) !== null) {
-                        throw new Exception(THIS_EMAIL_ALREADY_EXISTS);
+                        throw new Exception("Такой адрес уже зарегестрирован");
                     }
                 } else {
                     throw new Exception(INCORRECT_EMAIL_ERROR_MSG);
@@ -123,9 +123,9 @@
             unset($data['selected-image']);
             $data['spam'] = (isset($data['spam'])) ? 1 : 0;
 
-            PDO_DB::update($data, self::TABLE, $hash, 'hash');
+            PDO_DB::update($data, self::TABLE, $id, 'Id');
 
-            $data = self::getData($hash);
+            $data = self::getData($id);
 
             $_SESSION['auth']['login'] = $data['login'];
             
@@ -134,10 +134,10 @@
 
         private static function validateData($data)
         {
-            Validator::isMinLength('Phone number', $data['msisdn'], 9);
-            Validator::isMinLength('data_id', $data['data_id'], 1);
+            Validator::isMinLength('Phone number', $data['phone'], 9);
+            Validator::isMinLength('Id', $data['Id'], 1);
 
-            Validator::isMaxLength('Phone number', $data['msisdn'], 13);
-            Validator::isMaxLength('data_id', $data['data_id'], 30);
+            Validator::isMaxLength('Phone number', $data['phone'], 13);
+            Validator::isMaxLength('Id', $data['Id'], 30);
         }
     }
