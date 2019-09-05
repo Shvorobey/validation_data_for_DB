@@ -55,7 +55,7 @@
 
         public static function isValidCreditCard($fieldName, $fieldValue)
         {
-
+// В этом месте следует вставить стороку которая убирает пробелы!!!
             // Проверим являются ли все символы цифрми.
             if (!ctype_digit($fieldValue)) {
 
