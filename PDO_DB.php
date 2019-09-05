@@ -26,9 +26,9 @@
                     'type'     => 'mysql',
                     'charset'  => 'utf8',
                     'host'     => 'localhost',
-                    'user'     => 'root',
-                    'name'     => 'masterpass',
-                    'password' => 'sanyok758432',
+                    'user'     => 'your_user_name',
+                    'name'     => 'your_DB_name',
+                    'password' => 'your_password',
                 ];
 
                 try {
@@ -39,10 +39,10 @@
                     }
 
                     self::$pdo = new PDO($dsn, $defaults['user'], $defaults['password'], [
-                            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$defaults['charset']}"
-                        ]);
+                        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$defaults['charset']}"
+                    ]);
                 } catch (Exception $e) {
                     throw new Exception($e->getMessage(), $e->getCode());
                 }
@@ -100,7 +100,7 @@
 
                 foreach ($data as $key => $value) {
 
-                    $keys[] = $e_char . $key . $e_char;
+                    $keys[] = $e_char.$key.$e_char;
 
                     if ($value === null) {
                         $str_values .= "NULL, ";

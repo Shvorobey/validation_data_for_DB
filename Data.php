@@ -10,7 +10,7 @@
 
         public static function addNewData($data)
         {
-//            self::validateData($data);
+            self::validateData($data);
 
             foreach ($data as $key => $val) {
                 $data[$key] = trim($data[$key]);
@@ -33,12 +33,12 @@
 
         public static function deleteData($hash)
         {
-            PDO_DB::del_id(self::TABLE, $hash, false,'hash', 'hash');
+            PDO_DB::del_id(self::TABLE, $hash, false, 'hash', 'hash');
         }
 
         public static function isHashExist($hash)
         {
-            $stm = PDO_DB::prepare("SELECT * FROM " . self::TABLE . " WHERE hash=? LIMIT 1", [$hash]);
+            $stm = PDO_DB::prepare("SELECT * FROM ".self::TABLE." WHERE hash=? LIMIT 1", [$hash]);
             $data = $stm->fetch();
 
             if ($data === false) {
@@ -70,7 +70,7 @@
                 $data[$key] = htmlspecialchars($data[$key]);
                 $data[$key] = stripslashes($data[$key]);
             }
-//            self::validateData($data);
+            self::validateData($data);
 
             PDO_DB::update($data, self::TABLE, $hash, 'hash');
 
